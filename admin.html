@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passport Club - Admin Stamp Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto p-4 max-w-2xl">
+      <!-- Header -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+          🛂 Admin Stamp Tool
+        </h1>
+        <p class="text-gray-600">Stamp member passports after each meeting</p>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">⚙️ Setup</h2>
+
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Google Apps Script URL
+            </label>
+            <input
+              type="text"
+              id="apiUrl"
+              placeholder="https://script.google.com/macros/s/AKfycbylWzlmrDX9bryT6pJ48U961Ler7K2slyfJ3S8s_0SYq_B893pWoG41dm68OCo3ER6v/exec "
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              This will be saved in your browser
+            </p>
+          </div>
+
+          <button
+            onclick="saveApiUrl()"
+            class="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
+          >
+            Save API URL
+          </button>
+        </div>
+
+        <div
+          class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800"
+        >
+          ⚠️ Only set this once! Get your URL from Google Apps Script → Deploy →
+          Web app
+        </div>
+      </div>
+
+      <!-- Stamp Form -->
+      <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">
+          ✅ Stamp a Passport
+        </h2>
+
+        <form id="stampForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Member ID or Code
+            </label>
+            <input
+              type="text"
+              id="memberId"
+              placeholder="Paste member ID or scan QR code"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              Get this from the member's QR code or Google Sheet
+            </p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Country
+            </label>
+            <input
+              type="text"
+              id="country"
+              placeholder="e.g., France, Japan, Brazil"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              City/Region
+            </label>
+            <input
+              type="text"
+              id="city"
+              placeholder="e.g., Paris, Tokyo, Rio de Janeiro"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"
+          >
+            🎫 Stamp Passport
+          </button>
+        </form>
+
+        <!-- Result Message -->
+        <div id="resultMessage" class="hidden mt-4"></div>
+      </div>
+
+      <!-- Recent Stamps -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">📋 Recent Stamps</h2>
+        <div id="recentStamps" class="space-y-2">
+          <p class="text-gray-500 text-center py-4">No stamps yet today</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 mt-6">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">🚀 Quick Actions</h2>
+
+        <div class="space-y-3">
+          <button
+            onclick="openGoogleSheet()"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+          >
+            📊 Open Google Sheet
+          </button>
+
+          <button
+            onclick="openMemberApp()"
+            class="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+          >
+            👥 Open Member App
+          </button>
+
+          <button
+            onclick="clearRecentStamps()"
+            class="w-full bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 transition text-sm"
+          >
+            Clear Recent Stamps
+          </button>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="bg-blue-50 border border-blue-200 rounded-2xl p-6 mt-6">
+        <h3 class="font-bold text-blue-900 mb-2">📖 How to Use</h3>
+        <ol class="text-sm text-blue-800 space-y-2">
+          <li>
+            <strong>1.</strong> First time: Enter your Google Apps Script URL
+            and save it
+          </li>
+          <li>
+            <strong>2.</strong> Get the member ID by scanning their QR code or
+            from your sheet
+          </li>
+          <li>
+            <strong>3.</strong> Enter the country and city you're studying today
+          </li>
+          <li><strong>4.</strong> Click "Stamp Passport" - done!</li>
+          <li>
+            <strong>5.</strong> The member can refresh their passport to see the
+            new stamp
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <script>
+      // Load saved API URL on page load
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedUrl = localStorage.getItem("adminApiUrl");
+        if (savedUrl) {
+          document.getElementById("apiUrl").value = savedUrl;
+        }
+
+        loadRecentStamps();
+      });
+
+      // Save API URL to localStorage
+      function saveApiUrl() {
+        const apiUrl = document.getElementById("apiUrl").value.trim();
+        if (!apiUrl) {
+          showMessage("Please enter a valid API URL", "error");
+          return;
+        }
+
+        localStorage.setItem("adminApiUrl", apiUrl);
+        showMessage("✅ API URL saved successfully!", "success");
+      }
+
+      // Handle form submission
+      document
+        .getElementById("stampForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const apiUrl = localStorage.getItem("adminApiUrl");
+          if (!apiUrl) {
+            showMessage("⚠️ Please set up your API URL first!", "error");
+            return;
+          }
+
+          const memberId = document.getElementById("memberId").value.trim();
+          const country = document.getElementById("country").value.trim();
+          const city = document.getElementById("city").value.trim();
+
+          // Show loading state
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          const originalText = submitBtn.textContent;
+          submitBtn.textContent = "⏳ Stamping...";
+          submitBtn.disabled = true;
+
+          try {
+            // First, verify the member exists
+            const memberCheck = await fetch(apiUrl, {
+              method: "POST",
+              body: JSON.stringify({
+                action: "getMember",
+                data: { memberId },
+              }),
+              headers: { "Content-Type": "application/json" },
+            });
+
+            const memberResult = await memberCheck.json();
+
+            if (memberResult.error) {
+              showMessage("❌ Member not found. Please check the ID.", "error");
+              submitBtn.textContent = originalText;
+              submitBtn.disabled = false;
+              return;
+            }
+
+            // Add the stamp
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              body: JSON.stringify({
+                action: "addStamp",
+                data: {
+                  memberId: memberResult.member.id,
+                  country,
+                  city,
+                },
+              }),
+              headers: { "Content-Type": "application/json" },
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              showMessage(
+                `✅ Stamped ${memberResult.member.name}'s passport!`,
+                "success"
+              );
+
+              // Add to recent stamps
+              addRecentStamp({
+                memberName: memberResult.member.name,
+                country,
+                city,
+                timestamp: new Date().toISOString(),
+              });
+
+              // Clear form
+              document.getElementById("memberId").value = "";
+              document.getElementById("country").value = "";
+              document.getElementById("city").value = "";
+            } else {
+              showMessage(
+                "❌ Error stamping passport. Please try again.",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            showMessage(
+              "❌ Network error. Please check your connection.",
+              "error"
+            );
+          } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+          }
+        });
+
+      // Show message to user
+      function showMessage(message, type) {
+        const messageDiv = document.getElementById("resultMessage");
+        messageDiv.className = `p-4 rounded-lg ${
+          type === "success"
+            ? "bg-green-100 border border-green-300 text-green-800"
+            : "bg-red-100 border border-red-300 text-red-800"
+        }`;
+        messageDiv.textContent = message;
+        messageDiv.classList.remove("hidden");
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          messageDiv.classList.add("hidden");
+        }, 5000);
+      }
+
+      // Add stamp to recent stamps list
+      function addRecentStamp(stamp) {
+        let recentStamps = JSON.parse(
+          localStorage.getItem("recentStamps") || "[]"
+        );
+        recentStamps.unshift(stamp);
+
+        // Keep only last 10 stamps
+        recentStamps = recentStamps.slice(0, 10);
+
+        localStorage.setItem("recentStamps", JSON.stringify(recentStamps));
+        loadRecentStamps();
+      }
+
+      // Load and display recent stamps
+      function loadRecentStamps() {
+        const recentStamps = JSON.parse(
+          localStorage.getItem("recentStamps") || "[]"
+        );
+        const container = document.getElementById("recentStamps");
+
+        if (recentStamps.length === 0) {
+          container.innerHTML =
+            '<p class="text-gray-500 text-center py-4">No stamps yet today</p>';
+          return;
+        }
+
+        container.innerHTML = recentStamps
+          .map(
+            (stamp) => `
+        <div class="bg-gray-50 p-3 rounded-lg border border-gray-200">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold text-gray-800">${stamp.memberName}</div>
+              <div class="text-sm text-gray-600">${stamp.country} - ${
+              stamp.city
+            }</div>
+            </div>
+            <div class="text-xs text-gray-500">
+              ${new Date(stamp.timestamp).toLocaleTimeString()}
+            </div>
+          </div>
+        </div>
+      `
+          )
+          .join("");
+      }
+
+      // Clear recent stamps
+      function clearRecentStamps() {
+        if (confirm("Clear all recent stamps from this device?")) {
+          localStorage.removeItem("recentStamps");
+          loadRecentStamps();
+          showMessage("Recent stamps cleared", "success");
+        }
+      }
+
+      // Open Google Sheet (you'll need to set this)
+      function openGoogleSheet() {
+        const sheetUrl =
+          "https://docs.google.com/spreadsheets/d/1KyVAH801EUMi17Gz6zaCkIfZiSMWQn9RUOROPm1Mk4A/edit";
+        window.open(sheetUrl, "_blank");
+      }
+
+      // Open member app (update this with your GitHub Pages URL)
+      function openMemberApp() {
+        const memberAppUrl = prompt(
+          "Enter your member app URL (GitHub Pages URL):"
+        );
+        if (memberAppUrl) {
+          window.open(memberAppUrl, "_blank");
+        }
+      }
+    </script>
+  </body>
+</html>
