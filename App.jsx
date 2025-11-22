@@ -189,7 +189,7 @@ const UserPlus = () => (
 
 // IMPORTANT: Replace this with your actual Google Apps Script Web App URL
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbylWzlmrDX9bryT6pJ48U961Ler7K2slyfJ3S8s_0SYq_B893pWoG41dm68OCo3ER6v/exec ";
+  "https://script.google.com/macros/s/AKfycbylWzlmrDX9bryT6pJ48U961Ler7K2slyfJ3S8s_0SYq_B893pWoG41dm68OCo3ER6v/exec";
 
 // QR Code generation using QR Server API (free, no signup needed)
 const generateQRCodeURL = (data) => {
@@ -200,30 +200,36 @@ const generateQRCodeURL = (data) => {
 
 // Home View
 const HomeView = () => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
-      <div className="mb-6">
-        <MapPin className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Passport Club</h1>
-        <p className="text-gray-600">Collect memories from around the world</p>
+  <div style={{minHeight:"100vh",background:"linear-gradient(135deg, #fff6c5 0%, #468457 100%)",display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem"}}>
+    <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 20px 25px -5px rgba(0,0,0,0.1)",padding:"2rem",maxWidth:"28rem",width:"100%",textAlign:"center"}}>
+      <div style={{marginBottom:"1.5rem"}}>
+        <div style={{width:"4rem",height:"4rem",margin:"0 auto 1rem",color:"#468457"}}>
+          <MapPin />
+        </div>
+        <h1 style={{fontSize:"1.875rem",fontWeight:"bold",color:"#1f2937",marginBottom:"0.5rem"}}>Banana Club</h1>
+        <p style={{color:"#4b5563"}}>Collect memories from around the world</p>
       </div>
 
       {!memberId ? (
         <button
           onClick={() => setCurrentView("signup")}
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
+          style={{width:"100%",background:"#468457",color:"white",padding:"0.75rem",borderRadius:"0.5rem",fontWeight:"600",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.5rem",transition:"all 0.2s"}}
+          onMouseOver={(e) => e.target.style.background="#3a6e48"}
+          onMouseOut={(e) => e.target.style.background="#468457"}
         >
-          <UserPlus className="w-5 h-5" />
+          <UserPlus />
           Create Account
         </button>
       ) : (
-        <div className="space-y-3">
+        <div style={{display:"flex",flexDirection:"column",gap:"0.75rem"}}>
           <button
             onClick={() => {
               loadPassportData(memberId);
               setCurrentView("passport");
             }}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
+            style={{width:"100%",background:"#468457",color:"white",padding:"0.75rem",borderRadius:"0.5rem",fontWeight:"600",border:"none",cursor:"pointer",transition:"all 0.2s"}}
+            onMouseOver={(e) => e.target.style.background="#3a6e48"}
+            onMouseOut={(e) => e.target.style.background="#468457"}
           >
             View My Passport
           </button>
@@ -233,15 +239,17 @@ const HomeView = () => (
               setMemberId(null);
               setMemberData(null);
             }}
-            className="w-full bg-gray-200 text-gray-700 py-2 rounded-lg hover:bg-gray-300 transition text-sm"
+            style={{width:"100%",background:"#e5e7eb",color:"#374151",padding:"0.5rem",borderRadius:"0.5rem",border:"none",cursor:"pointer",fontSize:"0.875rem",transition:"all 0.2s"}}
+            onMouseOver={(e) => e.target.style.background="#d1d5db"}
+            onMouseOut={(e) => e.target.style.background="#e5e7eb"}
           >
             Sign Out
           </button>
         </div>
       )}
 
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <p className="text-sm text-gray-600 mb-3">Scan a member's QR code</p>
+      <div style={{marginTop:"1.5rem",paddingTop:"1.5rem",borderTop:"1px solid #e5e7eb"}}>
+        <p style={{fontSize:"0.875rem",color:"#4b5563",marginBottom:"0.75rem"}}>Scan a member's QR code</p>
         <button
           onClick={() => {
             const code = prompt("Enter member code from scanned QR:");
@@ -250,9 +258,11 @@ const HomeView = () => (
               setCurrentView("view");
             }
           }}
-          className="w-full bg-white border-2 border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50 transition flex items-center justify-center gap-2"
+          style={{width:"100%",background:"white",border:"2px solid #468457",color:"#468457",padding:"0.5rem",borderRadius:"0.5rem",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",gap:"0.5rem",transition:"all 0.2s",fontWeight:"500"}}
+          onMouseOver={(e) => e.target.style.background="#f0fdf4"}
+          onMouseOut={(e) => e.target.style.background="white"}
         >
-          <Camera className="w-5 h-5" />
+          <Camera />
           View Member Passport
         </button>
       </div>
@@ -262,38 +272,41 @@ const HomeView = () => (
 
 // Signup View
 const SignupView = () => (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-    <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
+  <div style={{minHeight:"100vh",background:"linear-gradient(135deg, #fff6c5 0%, #468457 100%)",display:"flex",alignItems:"center",justifyContent:"center",padding:"1rem"}}>
+    <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 20px 25px -5px rgba(0,0,0,0.1)",padding:"2rem",maxWidth:"28rem",width:"100%"}}>
       <button
         onClick={() => setCurrentView("home")}
-        className="text-gray-600 mb-4 hover:text-gray-800"
+        style={{color:"#4b5563",marginBottom:"1rem",background:"none",border:"none",cursor:"pointer",fontSize:"1rem"}}
       >
         ← Back
       </button>
 
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+      <h2 style={{fontSize:"1.5rem",fontWeight:"bold",color:"#1f2937",marginBottom:"1.5rem"}}>
         Create Your Passport
       </h2>
 
-      <form onSubmit={handleSignup} className="space-y-4">
+      <form onSubmit={handleSignup} style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label style={{display:"block",fontSize:"0.875rem",fontWeight:"500",color:"#374151",marginBottom:"0.5rem"}}>
             Your Name
           </label>
           <input
             type="text"
             value={signupName}
             onChange={(e) => setSignupName(e.target.value)}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            style={{width:"100%",padding:"0.75rem 1rem",border:"1px solid #d1d5db",borderRadius:"0.5rem",fontSize:"1rem",boxSizing:"border-box"}}
             placeholder="Enter your full name"
             required
+            autoFocus
           />
         </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:bg-gray-400"
+          style={{width:"100%",background:loading?"#9ca3af":"#468457",color:"white",padding:"0.75rem",borderRadius:"0.5rem",fontWeight:"600",border:"none",cursor:loading?"not-allowed":"pointer",transition:"all 0.2s"}}
+          onMouseOver={(e) => !loading && (e.target.style.background="#3a6e48")}
+          onMouseOut={(e) => !loading && (e.target.style.background="#468457")}
         >
           {loading ? "Creating..." : "Create Passport"}
         </button>
@@ -313,7 +326,7 @@ const PassportView = () => {
 
   if (!memberData)
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
         Loading...
       </div>
     );
@@ -327,24 +340,33 @@ const PassportView = () => {
 
   const passportURL = `${window.location.origin}?view=${memberId}`;
 
+  const stampColors = [
+    {bg:"linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)", border:"#f59e0b", text:"#78350f"},
+    {bg:"linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%)", border:"#3b82f6", text:"#1e3a8a"},
+    {bg:"linear-gradient(135deg, #fce7f3 0%, #f472b6 100%)", border:"#ec4899", text:"#831843"},
+    {bg:"linear-gradient(135deg, #f3e8ff 0%, #c084fc 100%)", border:"#a855f7", text:"#581c87"},
+    {bg:"linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)", border:"#10b981", text:"#064e3b"},
+    {bg:"linear-gradient(135deg, #fed7aa 0%, #fb923c 100%)", border:"#f97316", text:"#7c2d12"}
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 pb-20">
-      <div className="max-w-2xl mx-auto">
+    <div style={{minHeight:"100vh",background:"linear-gradient(135deg, #fff6c5 0%, #468457 100%)",padding:"1rem",paddingBottom:"5rem"}}>
+      <div style={{maxWidth:"42rem",margin:"0 auto"}}>
         <button
           onClick={() => setCurrentView("home")}
-          className="text-gray-600 mb-4 hover:text-gray-800"
+          style={{color:"#1f2937",marginBottom:"1rem",background:"none",border:"none",cursor:"pointer",fontSize:"1rem"}}
         >
           ← Home
         </button>
 
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <div className="flex items-start justify-between mb-4">
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem",marginBottom:"1.5rem"}}>
+          <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",marginBottom:"1rem",flexWrap:"wrap",gap:"1rem"}}>
             <div>
-              <h1 className="text-2xl font-bold text-gray-800">
+              <h1 style={{fontSize:"clamp(1.5rem, 5vw, 1.875rem)",fontWeight:"bold",color:"#1f2937",marginBottom:"0.25rem"}}>
                 {memberData.member.name}
               </h1>
-              <p className="text-sm text-gray-600">
+              <p style={{fontSize:"0.875rem",color:"#4b5563"}}>
                 Member since{" "}
                 {new Date(memberData.member.createdDate).toLocaleDateString()}
               </p>
@@ -354,77 +376,78 @@ const PassportView = () => {
                 const qrWindow = window.open("", "_blank");
                 qrWindow.document.write(`
                     <html>
-                      <head><title>My Passport QR Code</title></head>
-                      <body style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;">
+                      <head><title>My Passport QR Code</title><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+                      <body style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;padding:1rem;">
                         <h2>Scan to View My Passport</h2>
-                        <img src="${generateQRCodeURL(
-                          passportURL
-                        )}" alt="QR Code" />
+                        <img src="${generateQRCodeURL(passportURL)}" alt="QR Code" style="max-width:100%;height:auto;" />
                         <p style="margin-top:20px;color:#666;">Share this with other members!</p>
                       </body>
                     </html>
                   `);
               }}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition flex items-center gap-2"
+              style={{background:"#468457",color:"white",padding:"0.5rem 1rem",borderRadius:"0.5rem",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:"0.5rem",fontSize:"0.875rem",whiteSpace:"nowrap"}}
             >
-              <Share2 className="w-4 h-4" />
+              <Share2 />
               Share QR
             </button>
           </div>
 
           {/* QR Code Preview */}
-          <div className="bg-gray-50 rounded-lg p-4 text-center">
+          <div style={{background:"#f9fafb",borderRadius:"0.5rem",padding:"1rem",textAlign:"center"}}>
             <img
               src={generateQRCodeURL(passportURL)}
               alt="Passport QR Code"
-              className="w-40 h-40 mx-auto mb-2"
+              style={{width:"10rem",height:"10rem",margin:"0 auto 0.5rem",maxWidth:"100%"}}
             />
-            <p className="text-xs text-gray-600">Your Passport QR Code</p>
+            <p style={{fontSize:"0.75rem",color:"#4b5563"}}>Your Passport QR Code</p>
           </div>
         </div>
 
         {/* Stamps Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5" />
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem",marginBottom:"1.5rem"}}>
+          <h2 style={{fontSize:"1.25rem",fontWeight:"bold",color:"#1f2937",marginBottom:"1rem",display:"flex",alignItems:"center",gap:"0.5rem"}}>
+            <div style={{color:"#468457"}}><MapPin /></div>
             Countries Visited ({memberData.stamps.length})
           </h2>
           {memberData.stamps.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {memberData.stamps.map((stamp) => (
-                <div
-                  key={stamp.id}
-                  className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200"
-                >
-                  <div className="font-bold text-indigo-900">
-                    {stamp.country}
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(140px, 1fr))",gap:"0.75rem"}}>
+              {memberData.stamps.map((stamp, idx) => {
+                const colorScheme = stampColors[idx % stampColors.length];
+                return (
+                  <div
+                    key={stamp.id}
+                    style={{background:colorScheme.bg,borderRadius:"0.5rem",padding:"1rem",border:`2px solid ${colorScheme.border}`}}
+                  >
+                    <div style={{fontWeight:"bold",color:colorScheme.text,fontSize:"0.9rem"}}>
+                      {stamp.country}
+                    </div>
+                    <div style={{fontSize:"0.8rem",color:colorScheme.text,opacity:0.8}}>{stamp.city}</div>
+                    <div style={{fontSize:"0.7rem",color:"#4b5563",marginTop:"0.25rem"}}>
+                      {new Date(stamp.dateStamped).toLocaleDateString()}
+                    </div>
                   </div>
-                  <div className="text-sm text-indigo-700">{stamp.city}</div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    {new Date(stamp.dateStamped).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-4">
+            <p style={{color:"#6b7280",textAlign:"center",padding:"1rem"}}>
               No stamps yet. Attend meetings to collect stamps!
             </p>
           )}
         </div>
 
         {/* Souvenirs Section */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              <Book className="w-5 h-5" />
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem"}}>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:"1rem",flexWrap:"wrap",gap:"0.5rem"}}>
+            <h2 style={{fontSize:"1.25rem",fontWeight:"bold",color:"#1f2937",display:"flex",alignItems:"center",gap:"0.5rem"}}>
+              <div style={{color:"#468457"}}><Book /></div>
               My Souvenirs ({memberData.souvenirs.length})
             </h2>
             <button
               onClick={() => setShowAddSouvenir(true)}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2"
+              style={{background:"#10b981",color:"white",padding:"0.5rem 1rem",borderRadius:"0.5rem",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:"0.5rem",fontSize:"0.875rem"}}
             >
-              <Plus className="w-4 h-4" />
+              <Plus />
               Add
             </button>
           </div>
@@ -432,15 +455,15 @@ const PassportView = () => {
           {showAddSouvenir && (
             <form
               onSubmit={handleAddSouvenir}
-              className="bg-gray-50 rounded-lg p-4 mb-4"
+              style={{background:"#f9fafb",borderRadius:"0.5rem",padding:"1rem",marginBottom:"1rem"}}
             >
-              <div className="space-y-3">
+              <div style={{display:"flex",flexDirection:"column",gap:"0.75rem"}}>
                 <select
                   value={newSouvenir.type}
                   onChange={(e) =>
                     setNewSouvenir({ ...newSouvenir, type: e.target.value })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  style={{width:"100%",padding:"0.5rem 0.75rem",border:"1px solid #d1d5db",borderRadius:"0.5rem",fontSize:"1rem"}}
                 >
                   <option value="book">Book</option>
                   <option value="art">Art</option>
@@ -455,7 +478,7 @@ const PassportView = () => {
                     setNewSouvenir({ ...newSouvenir, title: e.target.value })
                   }
                   placeholder="Title"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  style={{width:"100%",padding:"0.5rem 0.75rem",border:"1px solid #d1d5db",borderRadius:"0.5rem",fontSize:"1rem",boxSizing:"border-box"}}
                   required
                 />
                 <textarea
@@ -464,20 +487,20 @@ const PassportView = () => {
                     setNewSouvenir({ ...newSouvenir, notes: e.target.value })
                   }
                   placeholder="Notes (optional)"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                  style={{width:"100%",padding:"0.5rem 0.75rem",border:"1px solid #d1d5db",borderRadius:"0.5rem",fontSize:"1rem",resize:"vertical",boxSizing:"border-box"}}
                   rows="2"
                 />
-                <div className="flex gap-2">
+                <div style={{display:"flex",gap:"0.5rem"}}>
                   <button
                     type="submit"
-                    className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+                    style={{flex:"1",background:"#10b981",color:"white",padding:"0.5rem",borderRadius:"0.5rem",border:"none",cursor:"pointer"}}
                   >
                     Add Souvenir
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowAddSouvenir(false)}
-                    className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400"
+                    style={{flex:"1",background:"#d1d5db",color:"#374151",padding:"0.5rem",borderRadius:"0.5rem",border:"none",cursor:"pointer"}}
                   >
                     Cancel
                   </button>
@@ -487,31 +510,31 @@ const PassportView = () => {
           )}
 
           {memberData.souvenirs.length > 0 ? (
-            <div className="space-y-3">
+            <div style={{display:"flex",flexDirection:"column",gap:"0.75rem"}}>
               {memberData.souvenirs.map((souvenir) => (
                 <div
                   key={souvenir.id}
-                  className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                  style={{background:"#f9fafb",borderRadius:"0.5rem",padding:"1rem",border:"1px solid #e5e7eb"}}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="text-indigo-600 mt-1">
+                  <div style={{display:"flex",alignItems:"flex-start",gap:"0.75rem"}}>
+                    <div style={{color:"#468457",marginTop:"0.25rem",flexShrink:0}}>
                       {getSouvenirIcon(souvenir.type)}
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-semibold text-gray-800">
+                    <div style={{flex:"1",minWidth:0}}>
+                      <div style={{display:"flex",alignItems:"center",gap:"0.5rem",marginBottom:"0.25rem",flexWrap:"wrap"}}>
+                        <span style={{fontWeight:"600",color:"#1f2937",wordBreak:"break-word"}}>
                           {souvenir.title}
                         </span>
-                        <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
+                        <span style={{fontSize:"0.75rem",background:"#e0f2e9",color:"#468457",padding:"0.125rem 0.5rem",borderRadius:"0.25rem",flexShrink:0}}>
                           {souvenir.type}
                         </span>
                       </div>
                       {souvenir.notes && (
-                        <p className="text-sm text-gray-600 mb-1">
+                        <p style={{fontSize:"0.875rem",color:"#4b5563",marginBottom:"0.25rem"}}>
                           {souvenir.notes}
                         </p>
                       )}
-                      <p className="text-xs text-gray-500">
+                      <p style={{fontSize:"0.75rem",color:"#6b7280"}}>
                         Added{" "}
                         {new Date(souvenir.dateAdded).toLocaleDateString()}
                       </p>
@@ -521,7 +544,7 @@ const PassportView = () => {
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-4">
+            <p style={{color:"#6b7280",textAlign:"center",padding:"1rem"}}>
               No souvenirs yet. Add your first one!
             </p>
           )}
@@ -535,70 +558,82 @@ const PassportView = () => {
 const ViewOnlyPassport = () => {
   if (!memberData)
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div style={{minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center"}}>
         Loading...
       </div>
     );
 
+  const stampColors = [
+    {bg:"linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)", border:"#f59e0b", text:"#78350f"},
+    {bg:"linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%)", border:"#3b82f6", text:"#1e3a8a"},
+    {bg:"linear-gradient(135deg, #fce7f3 0%, #f472b6 100%)", border:"#ec4899", text:"#831843"},
+    {bg:"linear-gradient(135deg, #f3e8ff 0%, #c084fc 100%)", border:"#a855f7", text:"#581c87"},
+    {bg:"linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)", border:"#10b981", text:"#064e3b"},
+    {bg:"linear-gradient(135deg, #fed7aa 0%, #fb923c 100%)", border:"#f97316", text:"#7c2d12"}
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="max-w-2xl mx-auto">
+    <div style={{minHeight:"100vh",background:"linear-gradient(135deg, #fff6c5 0%, #468457 100%)",padding:"1rem"}}>
+      <div style={{maxWidth:"42rem",margin:"0 auto"}}>
         <button
           onClick={() => {
             setCurrentView("home");
             setMemberData(null);
           }}
-          className="text-gray-600 mb-4 hover:text-gray-800"
+          style={{color:"#1f2937",marginBottom:"1rem",background:"none",border:"none",cursor:"pointer",fontSize:"1rem"}}
         >
           ← Back
         </button>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem",marginBottom:"1.5rem"}}>
+          <h1 style={{fontSize:"clamp(1.5rem, 5vw, 1.875rem)",fontWeight:"bold",color:"#1f2937",marginBottom:"0.25rem"}}>
             {memberData.member.name}'s Passport
           </h1>
-          <p className="text-sm text-gray-600">
+          <p style={{fontSize:"0.875rem",color:"#4b5563"}}>
             Member since{" "}
             {new Date(memberData.member.createdDate).toLocaleDateString()}
           </p>
         </div>
 
         {/* Stamps - visible to everyone */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <MapPin className="w-5 h-5" />
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem",marginBottom:"1.5rem"}}>
+          <h2 style={{fontSize:"1.25rem",fontWeight:"bold",color:"#1f2937",marginBottom:"1rem",display:"flex",alignItems:"center",gap:"0.5rem"}}>
+            <div style={{color:"#468457"}}><MapPin /></div>
             Countries Visited ({memberData.stamps.length})
           </h2>
           {memberData.stamps.length > 0 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {memberData.stamps.map((stamp) => (
-                <div
-                  key={stamp.id}
-                  className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200"
-                >
-                  <div className="font-bold text-indigo-900">
-                    {stamp.country}
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit, minmax(140px, 1fr))",gap:"0.75rem"}}>
+              {memberData.stamps.map((stamp, idx) => {
+                const colorScheme = stampColors[idx % stampColors.length];
+                return (
+                  <div
+                    key={stamp.id}
+                    style={{background:colorScheme.bg,borderRadius:"0.5rem",padding:"1rem",border:`2px solid ${colorScheme.border}`}}
+                  >
+                    <div style={{fontWeight:"bold",color:colorScheme.text,fontSize:"0.9rem"}}>
+                      {stamp.country}
+                    </div>
+                    <div style={{fontSize:"0.8rem",color:colorScheme.text,opacity:0.8}}>{stamp.city}</div>
+                    <div style={{fontSize:"0.7rem",color:"#4b5563",marginTop:"0.25rem"}}>
+                      {new Date(stamp.dateStamped).toLocaleDateString()}
+                    </div>
                   </div>
-                  <div className="text-sm text-indigo-700">{stamp.city}</div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    {new Date(stamp.dateStamped).toLocaleDateString()}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
-            <p className="text-gray-500 text-center py-4">No stamps yet</p>
+            <p style={{color:"#6b7280",textAlign:"center",padding:"1rem"}}>No stamps yet</p>
           )}
         </div>
 
         {/* Souvenirs count only - private details */}
-        <div className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Souvenirs</h2>
-          <p className="text-center text-gray-600 py-4">
+        <div style={{background:"white",borderRadius:"1.5rem",boxShadow:"0 10px 15px -3px rgba(0,0,0,0.1)",padding:"1.5rem"}}>
+          <h2 style={{fontSize:"1.25rem",fontWeight:"bold",color:"#1f2937",marginBottom:"1rem"}}>Souvenirs</h2>
+          <p style={{textAlign:"center",color:"#4b5563",padding:"1rem"}}>
             {memberData.member.name} has collected {memberData.souvenirs.length}{" "}
             souvenirs
           </p>
-          <p className="text-xs text-gray-500 text-center">
+          <p style={{fontSize:"0.75rem",color:"#6b7280",textAlign:"center"}}>
             (Souvenir details are private)
           </p>
         </div>
@@ -609,7 +644,7 @@ const ViewOnlyPassport = () => {
 
 // Main App Component
 const App = () => {
-  const [currentView, setCurrentView] = useState("home"); // 'home', 'signup', 'passport', 'view'
+  const [currentView, setCurrentView] = useState("home");
   const [memberId, setMemberId] = useState(null);
   const [memberData, setMemberData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -687,7 +722,7 @@ const App = () => {
       recipe: Utensils,
     };
     const Icon = icons[type] || Book;
-    return <Icon className="w-5 h-5" />;
+    return <Icon />;
   };
 
   // Handle URL parameter for viewing other members
