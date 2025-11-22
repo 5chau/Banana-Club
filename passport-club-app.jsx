@@ -1,24 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Camera, Book, MapPin, Music, Palette, Utensils, Film, Plus, Share2, UserPlus } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import {
+  Camera,
+  Book,
+  MapPin,
+  Music,
+  Palette,
+  Utensils,
+  Film,
+  Plus,
+  Share2,
+  UserPlus,
+} from "lucide-react";
 
 // IMPORTANT: Replace this with your actual Google Apps Script Web App URL
-const API_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbylWzlmrDX9bryT6pJ48U961Ler7K2slyfJ3S8s_0SYq_B893pWoG41dm68OCo3ER6v/exec";
 
 // QR Code generation using QR Server API (free, no signup needed)
 const generateQRCodeURL = (data) => {
-  return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data)}`;
+  return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(
+    data
+  )}`;
 };
 
 const App = () => {
-  const [currentView, setCurrentView] = useState('home'); // 'home', 'signup', 'passport', 'view'
+  const [currentView, setCurrentView] = useState("home"); // 'home', 'signup', 'passport', 'view'
   const [memberId, setMemberId] = useState(null);
   const [memberData, setMemberData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [signupName, setSignupName] = useState('');
+  const [signupName, setSignupName] = useState("");
 
   // Load member ID from localStorage on mount
   useEffect(() => {
-    const savedMemberId = localStorage.getItem('passportMemberId');
+    const savedMemberId = localStorage.getItem("passportMemberId");
     if (savedMemberId) {
       setMemberId(savedMemberId);
       loadPassportData(savedMemberId);
@@ -28,9 +42,9 @@ const App = () => {
   // API calls
   const apiCall = async (action, data) => {
     const response = await fetch(API_URL, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify({ action, data }),
-      headers: { 'Content-Type': 'application/json' }
+      headers: { "Content-Type": "application/json" },
     });
     return await response.json();
   };
@@ -38,18 +52,18 @@ const App = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     if (!signupName.trim()) return;
-    
+
     setLoading(true);
     try {
-      const result = await apiCall('createMember', { name: signupName });
+      const result = await apiCall("createMember", { name: signupName });
       if (result.success) {
         setMemberId(result.memberId);
-        localStorage.setItem('passportMemberId', result.memberId);
+        localStorage.setItem("passportMemberId", result.memberId);
         await loadPassportData(result.memberId);
-        setCurrentView('passport');
+        setCurrentView("passport");
       }
     } catch (error) {
-      alert('Error creating account: ' + error.message);
+      alert("Error creating account: " + error.message);
     }
     setLoading(false);
   };
@@ -57,24 +71,24 @@ const App = () => {
   const loadPassportData = async (id) => {
     setLoading(true);
     try {
-      const result = await apiCall('getPassport', { memberId: id });
+      const result = await apiCall("getPassport", { memberId: id });
       if (result.success) {
         setMemberData(result.passport);
       }
     } catch (error) {
-      console.error('Error loading passport:', error);
+      console.error("Error loading passport:", error);
     }
     setLoading(false);
   };
 
-  const addSouvenir = async (type, title, notes = '') => {
+  const addSouvenir = async (type, title, notes = "") => {
     if (!memberId) return;
     setLoading(true);
     try {
-      await apiCall('addSouvenir', { memberId, type, title, notes });
+      await apiCall("addSouvenir", { memberId, type, title, notes });
       await loadPassportData(memberId);
     } catch (error) {
-      alert('Error adding souvenir: ' + error.message);
+      alert("Error adding souvenir: " + error.message);
     }
     setLoading(false);
   };
@@ -85,7 +99,7 @@ const App = () => {
       art: Palette,
       movie: Film,
       song: Music,
-      recipe: Utensils
+      recipe: Utensils,
     };
     const Icon = icons[type] || Book;
     return <Icon className="w-5 h-5" />;
@@ -97,13 +111,17 @@ const App = () => {
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
         <div className="mb-6">
           <MapPin className="w-16 h-16 mx-auto text-indigo-600 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Passport Club</h1>
-          <p className="text-gray-600">Collect memories from around the world</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Passport Club
+          </h1>
+          <p className="text-gray-600">
+            Collect memories from around the world
+          </p>
         </div>
-        
+
         {!memberId ? (
           <button
-            onClick={() => setCurrentView('signup')}
+            onClick={() => setCurrentView("signup")}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition flex items-center justify-center gap-2"
           >
             <UserPlus className="w-5 h-5" />
@@ -114,7 +132,7 @@ const App = () => {
             <button
               onClick={() => {
                 loadPassportData(memberId);
-                setCurrentView('passport');
+                setCurrentView("passport");
               }}
               className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
             >
@@ -122,7 +140,7 @@ const App = () => {
             </button>
             <button
               onClick={() => {
-                localStorage.removeItem('passportMemberId');
+                localStorage.removeItem("passportMemberId");
                 setMemberId(null);
                 setMemberData(null);
               }}
@@ -132,15 +150,15 @@ const App = () => {
             </button>
           </div>
         )}
-        
+
         <div className="mt-6 pt-6 border-t border-gray-200">
           <p className="text-sm text-gray-600 mb-3">Scan a member's QR code</p>
           <button
             onClick={() => {
-              const code = prompt('Enter member code from scanned QR:');
+              const code = prompt("Enter member code from scanned QR:");
               if (code) {
                 loadPassportData(code);
-                setCurrentView('view');
+                setCurrentView("view");
               }
             }}
             className="w-full bg-white border-2 border-indigo-600 text-indigo-600 py-2 rounded-lg hover:bg-indigo-50 transition flex items-center justify-center gap-2"
@@ -158,14 +176,16 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full">
         <button
-          onClick={() => setCurrentView('home')}
+          onClick={() => setCurrentView("home")}
           className="text-gray-600 mb-4 hover:text-gray-800"
         >
           ← Back
         </button>
-        
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Your Passport</h2>
-        
+
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Create Your Passport
+        </h2>
+
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -180,13 +200,13 @@ const App = () => {
               required
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:bg-gray-400"
           >
-            {loading ? 'Creating...' : 'Create Passport'}
+            {loading ? "Creating..." : "Create Passport"}
           </button>
         </form>
       </div>
@@ -196,14 +216,23 @@ const App = () => {
   // Passport View (Owner's view with add functionality)
   const PassportView = () => {
     const [showAddSouvenir, setShowAddSouvenir] = useState(false);
-    const [newSouvenir, setNewSouvenir] = useState({ type: 'book', title: '', notes: '' });
+    const [newSouvenir, setNewSouvenir] = useState({
+      type: "book",
+      title: "",
+      notes: "",
+    });
 
-    if (!memberData) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    if (!memberData)
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      );
 
     const handleAddSouvenir = async (e) => {
       e.preventDefault();
       await addSouvenir(newSouvenir.type, newSouvenir.title, newSouvenir.notes);
-      setNewSouvenir({ type: 'book', title: '', notes: '' });
+      setNewSouvenir({ type: "book", title: "", notes: "" });
       setShowAddSouvenir(false);
     };
 
@@ -213,30 +242,35 @@ const App = () => {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4 pb-20">
         <div className="max-w-2xl mx-auto">
           <button
-            onClick={() => setCurrentView('home')}
+            onClick={() => setCurrentView("home")}
             className="text-gray-600 mb-4 hover:text-gray-800"
           >
             ← Home
           </button>
-          
+
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h1 className="text-2xl font-bold text-gray-800">{memberData.member.name}</h1>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  {memberData.member.name}
+                </h1>
                 <p className="text-sm text-gray-600">
-                  Member since {new Date(memberData.member.createdDate).toLocaleDateString()}
+                  Member since{" "}
+                  {new Date(memberData.member.createdDate).toLocaleDateString()}
                 </p>
               </div>
               <button
                 onClick={() => {
-                  const qrWindow = window.open('', '_blank');
+                  const qrWindow = window.open("", "_blank");
                   qrWindow.document.write(`
                     <html>
                       <head><title>My Passport QR Code</title></head>
                       <body style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;">
                         <h2>Scan to View My Passport</h2>
-                        <img src="${generateQRCodeURL(passportURL)}" alt="QR Code" />
+                        <img src="${generateQRCodeURL(
+                          passportURL
+                        )}" alt="QR Code" />
                         <p style="margin-top:20px;color:#666;">Share this with other members!</p>
                       </body>
                     </html>
@@ -269,8 +303,13 @@ const App = () => {
             {memberData.stamps.length > 0 ? (
               <div className="grid grid-cols-2 gap-3">
                 {memberData.stamps.map((stamp) => (
-                  <div key={stamp.id} className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200">
-                    <div className="font-bold text-indigo-900">{stamp.country}</div>
+                  <div
+                    key={stamp.id}
+                    className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200"
+                  >
+                    <div className="font-bold text-indigo-900">
+                      {stamp.country}
+                    </div>
                     <div className="text-sm text-indigo-700">{stamp.city}</div>
                     <div className="text-xs text-gray-600 mt-1">
                       {new Date(stamp.dateStamped).toLocaleDateString()}
@@ -279,7 +318,9 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-4">No stamps yet. Attend meetings to collect stamps!</p>
+              <p className="text-gray-500 text-center py-4">
+                No stamps yet. Attend meetings to collect stamps!
+              </p>
             )}
           </div>
 
@@ -300,11 +341,16 @@ const App = () => {
             </div>
 
             {showAddSouvenir && (
-              <form onSubmit={handleAddSouvenir} className="bg-gray-50 rounded-lg p-4 mb-4">
+              <form
+                onSubmit={handleAddSouvenir}
+                className="bg-gray-50 rounded-lg p-4 mb-4"
+              >
                 <div className="space-y-3">
                   <select
                     value={newSouvenir.type}
-                    onChange={(e) => setNewSouvenir({...newSouvenir, type: e.target.value})}
+                    onChange={(e) =>
+                      setNewSouvenir({ ...newSouvenir, type: e.target.value })
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   >
                     <option value="book">Book</option>
@@ -316,20 +362,27 @@ const App = () => {
                   <input
                     type="text"
                     value={newSouvenir.title}
-                    onChange={(e) => setNewSouvenir({...newSouvenir, title: e.target.value})}
+                    onChange={(e) =>
+                      setNewSouvenir({ ...newSouvenir, title: e.target.value })
+                    }
                     placeholder="Title"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     required
                   />
                   <textarea
                     value={newSouvenir.notes}
-                    onChange={(e) => setNewSouvenir({...newSouvenir, notes: e.target.value})}
+                    onChange={(e) =>
+                      setNewSouvenir({ ...newSouvenir, notes: e.target.value })
+                    }
                     placeholder="Notes (optional)"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                     rows="2"
                   />
                   <div className="flex gap-2">
-                    <button type="submit" className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                    <button
+                      type="submit"
+                      className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700"
+                    >
                       Add Souvenir
                     </button>
                     <button
@@ -347,23 +400,31 @@ const App = () => {
             {memberData.souvenirs.length > 0 ? (
               <div className="space-y-3">
                 {memberData.souvenirs.map((souvenir) => (
-                  <div key={souvenir.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                  <div
+                    key={souvenir.id}
+                    className="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                  >
                     <div className="flex items-start gap-3">
                       <div className="text-indigo-600 mt-1">
                         {getSouvenirIcon(souvenir.type)}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold text-gray-800">{souvenir.title}</span>
+                          <span className="font-semibold text-gray-800">
+                            {souvenir.title}
+                          </span>
                           <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
                             {souvenir.type}
                           </span>
                         </div>
                         {souvenir.notes && (
-                          <p className="text-sm text-gray-600 mb-1">{souvenir.notes}</p>
+                          <p className="text-sm text-gray-600 mb-1">
+                            {souvenir.notes}
+                          </p>
                         )}
                         <p className="text-xs text-gray-500">
-                          Added {new Date(souvenir.dateAdded).toLocaleDateString()}
+                          Added{" "}
+                          {new Date(souvenir.dateAdded).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
@@ -371,7 +432,9 @@ const App = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-4">No souvenirs yet. Add your first one!</p>
+              <p className="text-gray-500 text-center py-4">
+                No souvenirs yet. Add your first one!
+              </p>
             )}
           </div>
         </div>
@@ -381,25 +444,33 @@ const App = () => {
 
   // View Only (for scanning others' QR codes)
   const ViewOnlyPassport = () => {
-    if (!memberData) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    if (!memberData)
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          Loading...
+        </div>
+      );
 
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <div className="max-w-2xl mx-auto">
           <button
             onClick={() => {
-              setCurrentView('home');
+              setCurrentView("home");
               setMemberData(null);
             }}
             className="text-gray-600 mb-4 hover:text-gray-800"
           >
             ← Back
           </button>
-          
+
           <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-            <h1 className="text-2xl font-bold text-gray-800">{memberData.member.name}'s Passport</h1>
+            <h1 className="text-2xl font-bold text-gray-800">
+              {memberData.member.name}'s Passport
+            </h1>
             <p className="text-sm text-gray-600">
-              Member since {new Date(memberData.member.createdDate).toLocaleDateString()}
+              Member since{" "}
+              {new Date(memberData.member.createdDate).toLocaleDateString()}
             </p>
           </div>
 
@@ -412,8 +483,13 @@ const App = () => {
             {memberData.stamps.length > 0 ? (
               <div className="grid grid-cols-2 gap-3">
                 {memberData.stamps.map((stamp) => (
-                  <div key={stamp.id} className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200">
-                    <div className="font-bold text-indigo-900">{stamp.country}</div>
+                  <div
+                    key={stamp.id}
+                    className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border-2 border-indigo-200"
+                  >
+                    <div className="font-bold text-indigo-900">
+                      {stamp.country}
+                    </div>
                     <div className="text-sm text-indigo-700">{stamp.city}</div>
                     <div className="text-xs text-gray-600 mt-1">
                       {new Date(stamp.dateStamped).toLocaleDateString()}
@@ -430,7 +506,8 @@ const App = () => {
           <div className="bg-white rounded-2xl shadow-lg p-6">
             <h2 className="text-xl font-bold text-gray-800 mb-4">Souvenirs</h2>
             <p className="text-center text-gray-600 py-4">
-              {memberData.member.name} has collected {memberData.souvenirs.length} souvenirs
+              {memberData.member.name} has collected{" "}
+              {memberData.souvenirs.length} souvenirs
             </p>
             <p className="text-xs text-gray-500 text-center">
               (Souvenir details are private)
@@ -444,20 +521,20 @@ const App = () => {
   // Handle URL parameter for viewing other members
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    const viewMemberId = urlParams.get('view');
+    const viewMemberId = urlParams.get("view");
     if (viewMemberId) {
       loadPassportData(viewMemberId);
-      setCurrentView('view');
+      setCurrentView("view");
     }
   }, []);
 
   // Render current view
   return (
     <>
-      {currentView === 'home' && <HomeView />}
-      {currentView === 'signup' && <SignupView />}
-      {currentView === 'passport' && <PassportView />}
-      {currentView === 'view' && <ViewOnlyPassport />}
+      {currentView === "home" && <HomeView />}
+      {currentView === "signup" && <SignupView />}
+      {currentView === "passport" && <PassportView />}
+      {currentView === "view" && <ViewOnlyPassport />}
     </>
   );
 };
